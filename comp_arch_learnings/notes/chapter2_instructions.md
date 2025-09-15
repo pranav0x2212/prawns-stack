@@ -43,4 +43,4 @@ The CPU only knows which is **code** and which is **data** based on **how it acc
 >[!IMPORTANT]
 > Memory holds everything as numbers. Whether a number is **data** or an **instruction** depends entirely on **how the CPU uses it** — that’s the beauty (and danger) of the stored-program concept.
 
-![risc-v_operands]()
+![risc-v_operands](../images/risc-v_operands.png)
