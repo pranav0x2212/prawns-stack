@@ -133,4 +133,20 @@ This directory contains comprehensive notes for Computer Organization and Design
 - Practical applications
 - Exam-focused content
 
+## Self-Testing and Practice
+
+### **MCQs (Multiple Choice Questions)**
+- **`MCQs.md`** - Unit 1 questions covering basic concepts, operations, and processor fundamentals
+- **`MCQs_U2.md`** - Unit 2 questions focused on pipelining, hazards, and performance
+
+### **Numericals**
+- **`Numericals_U1.md`** - Unit 1 practice problems with step-by-step solutions
+- **`Numericals_U2.md`** - Unit 2 pipeline calculations and hazard analysis
+
+Both MCQ and Numerical files include:
+- Easy, medium, and hard difficulty levels
+- Detailed explanations and solutions
+- Collapsible answer sections for self-testing
+- Exam-pattern questions
+
 Good luck with your exam lol.
