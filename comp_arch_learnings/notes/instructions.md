@@ -66,6 +66,14 @@ hardware simple. This is where the first design principle comes into picture: **
 - The Instruction Set Architecture (ISA) defines the operations the hardware can execute.
 - RISC-V uses fixed-length 32-bit instructions and a small, regular set of formats.
 
+## Instruction Types
+
+- Arithmetic: `add`, `sub`, `addi`, etc.
+- Logical: `and`, `or`, `xor`, `sll`, `srl`, etc.
+- Memory access: `lw`, `sw`, etc.
+- Control flow: `beq`, `bne`, `jal`, `jalr`
+- Environment: `ecall`, `ebreak
+
 ## RISC-V Instruction Formats
 
 | Format | Fields | Example instruction |
@@ -77,13 +85,14 @@ hardware simple. This is where the first design principle comes into picture: **
 | U-type | opcode, rd, imm[31:12] | `lui x1, 0x10000` |
 | J-type | opcode, rd, imm[20|10:1|11|19:12] | `jal x1, offset` |
 
-## Instruction Types
+## Instruction Encoding Fields
 
-- Arithmetic: `add`, `sub`, `addi`, etc.
-- Logical: `and`, `or`, `xor`, `sll`, `srl`, etc.
-- Memory access: `lw`, `sw`, etc.
-- Control flow: `beq`, `bne`, `jal`, `jalr`
-- Environment: `ecall`, `ebreak
+- **R-type:** `[ funct7 | rs2 | rs1 | funct3 | rd | opcode ]`
+- **I-type:** `[ imm[11:0] | rs1 | funct3 | rd | opcode ]`
+- **S-type:** `[ imm[11:5] | rs2 | rs1 | funct3 | imm[4:0] | opcode ]`
+- **B-type:** `[ imm[12] | imm[10:5] | rs2 | rs1 | funct3 | imm[4:1] | imm[11] | opcode ]`
+- **J-type:** `[ imm[20] | imm[10:1] | imm[11] | imm[19:12] | rd | opcode ]`
+
 ## Procedures and Function Calls
 
 - Use `jal` to jump to a procedure and store return address in a register (usually `x1`, aka `ra`).
@@ -124,11 +133,85 @@ addi sp, sp, 8
 | x10–x17 | a0–a7 | Function args / return values |
 | x8–x9, x18–x27 | s0–s11 | Saved registers |
 
-## Instruction Encoding Fields
+## Instructions for Making Decisions
 
-- R-type: `[ funct7 | rs2 | rs1 | funct3 | rd | opcode ]`
-- I-type: `[ imm[11:0] | rs1 | funct3 | rd | opcode ]`
-- S-type: `[ imm[11:5] | rs2 | rs1 | funct3 | imm[4:0] | opcode ]`
+Programs are rarely straight-line; they need **conditional execution** and **loops**.  
+RISC-V provides **branch instructions** that compare two registers and conditionally update the **Program Counter (PC).**
+
+### Branch Instructions
+- **beq rs1, rs2, label** → branch if equal
+- **bne rs1, rs2, label** → branch if not equal
+- **blt rs1, rs2, label** → branch if less than (signed)
+- **bge rs1, rs2, label** → branch if greater or equal (signed)
+- **bltu/bgeu** → unsigned comparisons
+
+### Example: If-Else
+C code:
+```c
+if (a == b)
+    x = 1;
+else
+    x = 0;
+```
+
+RISC-V:
+```assembly
+    beq a0, a1, L1
+    li t0, 0
+    j L2
+L1: li t0, 1
+L2:
+```
+
+### Example: While Loop
+C code:
+```c
+while (i < n) {
+    i++;
+}
+```
+
+RISC-V:
+```assembly
+Loop:
+    blt t0, t1, Body
+    j Exit
+Body:
+    addi t0, t0, 1
+    j Loop
+Exit:
+```
+
+- Branches are PC-relative: target = PC + immediate.
+- This keeps instructions position-independent and simplifies relocation.
+
+### Binary Representation Example
+Let's encode a branch instruction step by step:
+
+```assembly
+beq x5, x6, 16   # if x5 == x6, jump ahead 16 bytes
+```
+
+Format: B-type
+
+Fields:
+- opcode = 1100011
+- funct3 = 000 (beq)
+- rs1 = 5 (00101)
+- rs2 = 6 (00110)
+- imm = 16 → binary 000000010000
+
+Instruction binary layout:
+```
+imm[12] | imm[10:5] | rs2 | rs1 | funct3 | imm[4:1] | imm[11] | opcode
+```
+
+Final machine code: 0x00628663
+
+> [!NOTE]
+> Control-flow instructions (branches, jumps) are where the PC changes. Every other instruction assumes sequential PC (PC+4).
+
+---
 
 ## Example: C to RISC-V
 
@@ -143,3 +226,49 @@ sum:
     add a0, a0, a1
     ret 
 ```
+
+---
+
+# Rest of RISC-V Instruction Set
+
+## Pseudo-Instructions
+
+|Pseudo|Actual Expansion|Notes|
+|---|---|---|
+|`mv rd, rs`|`addi rd, rs, 0`|Copy register|
+|`li rd, imm`|`lui/addi`|Load immediate (pseudo expands depending on value)|
+|`nop`|`addi x0, x0, 0`|No operation|
+|`la rd, symbol`|`auipc/addi`|Load address of symbol|
+|`not rd, rs`|`xori rd, rs, -1`|Bitwise NOT|
+|`neg rd, rs`|`sub rd, x0, rs`|Negate value|
+
+---
+
+## System Calls
+
+- RISC-V environment uses **`ecall`** to request services from the operating system.
+    
+- Arguments and return values follow standard registers:
+    
+    - `a0`–`a7` → arguments
+        
+    - `a0` → return value
+        
+- **`ebreak`** is used for breakpoints or stopping execution in simulation/debugging.
+    
+
+**Example: print integer (pseudo)**
+
+```assembly
+li a7, 1     # ecall code for print_int
+mv a0, t0    # integer to print
+ecall
+```
+
+- **Other environment instructions** include:
+    
+    - `csrr` / `csrw` → read/write control/status registers
+        
+    - `fence` → memory ordering
+        
+    - `uret/sret/mret` → return from trap/exceptions

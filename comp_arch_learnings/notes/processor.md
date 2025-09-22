@@ -424,5 +424,3 @@ This violates a key design principle:
     - Multi-cycle operations (e.g., floating point)
         
     - Power or area constraints
-
-
