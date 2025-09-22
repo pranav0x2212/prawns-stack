@@ -104,19 +104,19 @@ This directory contains comprehensive notes for Computer Organization and Design
 ## Quick Reference
 
 ### **Need to understand basic concepts?**
-→ Start with `arch_and_blocks.md`
+-> Start with `arch_and_blocks.md`
 
 ### **Working with instructions and operations?**
-→ `ops_and_operands.md` + `instructions.md`
+-> `ops_and_operands.md` + `instructions.md`
 
 ### **Learning about procedures and C programming?**
-→ `everything_related_to_c.md`
+-> `everything_related_to_c.md`
 
 ### **Understanding processor implementation?**
-→ `processor.md`
+-> `processor.md`
 
 ### **Studying pipelining?**
-→ `pipelining.md` + `hazard_control.md`
+-> `pipelining.md` + `hazard_control.md`
 
 ## Study Strategy
 
