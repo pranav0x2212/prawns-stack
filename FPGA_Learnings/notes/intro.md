@@ -64,4 +64,4 @@ Recent FPGA developments blur the line between hardware and software:
 - **High-Level Synthesis (HLS)** tools allow C/C++ or Python code to be compiled into FPGA logic.
 - **Open-source ecosystems** like LiteX, SymbiFlow, and Yosys are democratizing FPGA development.
 
-FPGAs are no longer niche tools — they are becoming central to the next generation of adaptable, energy-efficient computing systems.
+FPGAs are no longer niche tools — they are becoming central to the next generation of adaptable, energy-efficient computing systems
