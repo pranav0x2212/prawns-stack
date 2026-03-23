@@ -1,2 +1,2 @@
-# -prawns
-A personal lab of notes, papers, and code across hardware and systems.
+# Prawns Stack
+lab of notes, papers, and code across hardware and systems.
