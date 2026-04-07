@@ -1,5 +1,0 @@
-\relax 
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Internal architecture of the Reorder Buffer (ROB), operating entirely within the client clock domain. \textbf  {Issue path:} the \textbf  {Seq Num Generator} assigns a per-AXID \texttt  {seqnum} in strictly increasing order, allocates the corresponding \texttt  {queue[AXID][seqnum]} slot, and passes \{AXID,\,seqnum\} to \textbf  {Tag Insertion}, which embeds the composite tag into the outgoing \texttt  {RD\_CMD} before it crosses the Async FIFO CDC boundary (outside ROB). \textbf  {Return path:} read data arrives from the DRAM domain as \{tag,\,data\}; \textbf  {Tag Lookup \&\ Fill} decodes the tag, writes data into \texttt  {queue[AXID][seqnum]}, and sets \texttt  {slot.valid\,=\,1}. \textbf  {Retirement Logic} advances a per-AXID HEAD pointer whenever \texttt  {HEAD.valid\,=\,1}, guaranteeing in-order delivery per AXID (Option\,2) while allowing independent AXIDs to retire without mutual blocking.}}{1}{}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:rob}{{1}{1}{}{figure.1}{}}
-\gdef \@abspage@last{1}
