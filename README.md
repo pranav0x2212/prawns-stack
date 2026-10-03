@@ -1,2 +1,2 @@
 # Prawns Stack
-lab of notes, papers, and code across hardware and systems.
+lab of notes, papers, and code across hardware and systemss.
